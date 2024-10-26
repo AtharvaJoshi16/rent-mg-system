@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Owner {
+  id BigInt @id
+  email String @unique
+  password String
+  userType UserType
+  firstName String
+  middleName String?
+  lastName String
+  isVerified Boolean @default(false)
+  phone1 BigInt @unique
+  phone2 BigInt? @unique
+  address Address?
+  aadharId String
+  panId String
+  aadhar String
+  pan String
+  drivingLicenseId String?
+  drivingLicense String?
+  voterId String?
+  voter String?
+  profileImage String?
+  description String?
+  preferredContactMethod PreferredContactMethod?
+  preferredLanguage PreferredLanguage?
+  emergencyDetails EmergencyDetails?
+  properties Property[]
+  lastActive DateTime
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model Property {
+  id BigInt @id
+  ownerId BigInt
+  renters Renter[]
+  owner Owner @relation(fields: [ownerId], references: [id])
+  isVerified Boolean? @default(false)
+  status PropertyStatus @default(pendingApproval)
+  nextAvailableDate DateTime?
+  name String?
+  address Address?
+  type PropertyType
+  roomDetails RoomDetails?
+  rent Int?
+  description String
+  preferred Preference
+  photos String[]
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model RoomDetails {
+  id String @id @default(cuid())
+  propertyId BigInt @unique
+  property Property @relation(fields: [propertyId], references: [id])
+  quantity Int
+  rentType RentType
+  rent Int?
+  perPersonRent Int?
+}
+
+model Renter {
+  id BigInt @id
+  renterPropertyId BigInt?
+  renterProperty Property? @relation(fields: [renterPropertyId], references: [id])
+  password String
+  firstName String
+  middleName String?
+  lastName String
+  address Address?
+  email String
+  phone1 BigInt @unique
+  phone2 BigInt? @unique
+  DOB DateTime
+  userType UserType
+  aadharId String
+  panId String
+  aadhar String
+  pan String
+  drivingLicenseId String?
+  drivingLicense String?
+  voterId String?
+  voter String?
+  profileImage String
+  desription String?
+  createdAt DateTime
+  updatedAt DateTime
+  guardianDetails EmergencyDetails[]
+}
+
+enum Preference {
+  family
+  bachelors
+  any
+}
+
+enum RentType {
+  total
+  perPerson
+}
+
+enum PropertyType {
+  apartment
+  house
+  rooms
+}
+
+model Address {
+  id String @id @default(cuid())
+  ownerId BigInt? @unique
+  owner Owner? @relation(fields: [ownerId], references: [id])
+  propertyId BigInt? @unique
+  property Property? @relation(fields: [propertyId], references: [id])
+  renterId BigInt? @unique
+  renter Renter? @relation(fields: [renterId], references: [id])
+  addressLine String
+  city String
+  state String
+  pincode BigInt
+  electricityBill String?
+  propertyTaxBill String?
+}
+
+model EmergencyDetails {
+  id String @id @default(cuid())
+  ownerId BigInt? @unique
+  owner Owner? @relation(fields: [ownerId], references: [id])
+  renterId BigInt? @unique
+  renter Renter? @relation(fields: [renterId], references: [id])
+  phone1 BigInt @unique
+  phone2 BigInt?
+  email String @unique
+  firstName String
+  middleName String?
+  lastName String
+  relation String
+}
+
+enum PropertyStatus {
+  available
+  rentedOut
+  underMaintenance
+  notRentingAnymore
+  pendingApproval
+}
+
+enum PreferredContactMethod {
+  email
+  phone
+  any
+}
+
+enum PreferredLanguage {
+  marathi
+  hindi
+  english
+}
+
+enum UserType {
+  SUPERUSER
+  OWNER
+  RENTER
+}
