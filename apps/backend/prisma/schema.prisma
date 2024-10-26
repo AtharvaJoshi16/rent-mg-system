@@ -14,16 +14,16 @@ datasource db {
 }
 
 model Owner {
-  id BigInt @id
+  id Int @id
   email String @unique
   password String
   userType UserType
   firstName String
   middleName String?
   lastName String
-  isVerified Boolean @default(false)
-  phone1 BigInt @unique
-  phone2 BigInt? @unique
+  isVerified Boolean? @default(false)
+  phone1 Int @unique
+  phone2 Int? @unique
   address Address?
   aadharId String
   panId String
@@ -36,7 +36,7 @@ model Owner {
   profileImage String?
   description String?
   preferredContactMethod PreferredContactMethod?
-  preferredLanguage PreferredLanguage?
+  preferredLanguage String?
   emergencyDetails EmergencyDetails?
   properties Property[]
   lastActive DateTime
@@ -45,8 +45,8 @@ model Owner {
 }
 
 model Property {
-  id BigInt @id
-  ownerId BigInt
+  id Int @id
+  ownerId Int
   renters Renter[]
   owner Owner @relation(fields: [ownerId], references: [id])
   isVerified Boolean? @default(false)
@@ -66,7 +66,7 @@ model Property {
 
 model RoomDetails {
   id String @id @default(cuid())
-  propertyId BigInt @unique
+  propertyId Int @unique
   property Property @relation(fields: [propertyId], references: [id])
   quantity Int
   rentType RentType
@@ -75,8 +75,8 @@ model RoomDetails {
 }
 
 model Renter {
-  id BigInt @id
-  renterPropertyId BigInt?
+  id Int @id
+  renterPropertyId Int?
   renterProperty Property? @relation(fields: [renterPropertyId], references: [id])
   password String
   firstName String
@@ -84,8 +84,8 @@ model Renter {
   lastName String
   address Address?
   email String
-  phone1 BigInt @unique
-  phone2 BigInt? @unique
+  phone1 Int @unique
+  phone2 Int? @unique
   DOB DateTime
   userType UserType
   aadharId String
@@ -122,28 +122,28 @@ enum PropertyType {
 
 model Address {
   id String @id @default(cuid())
-  ownerId BigInt? @unique
+  ownerId Int? @unique
   owner Owner? @relation(fields: [ownerId], references: [id])
-  propertyId BigInt? @unique
+  propertyId Int? @unique
   property Property? @relation(fields: [propertyId], references: [id])
-  renterId BigInt? @unique
+  renterId Int? @unique
   renter Renter? @relation(fields: [renterId], references: [id])
   addressLine String
   city String
   state String
-  pincode BigInt
+  pincode Int
   electricityBill String?
   propertyTaxBill String?
 }
 
 model EmergencyDetails {
   id String @id @default(cuid())
-  ownerId BigInt? @unique
+  ownerId Int? @unique
   owner Owner? @relation(fields: [ownerId], references: [id])
-  renterId BigInt? @unique
+  renterId Int? @unique
   renter Renter? @relation(fields: [renterId], references: [id])
-  phone1 BigInt @unique
-  phone2 BigInt?
+  phone1 Int @unique
+  phone2 Int?
   email String @unique
   firstName String
   middleName String?
@@ -165,14 +165,8 @@ enum PreferredContactMethod {
   any
 }
 
-enum PreferredLanguage {
-  marathi
-  hindi
-  english
-}
-
 enum UserType {
-  SUPERUSER
-  OWNER
-  RENTER
+  superuser
+  owner
+  renter
 }
