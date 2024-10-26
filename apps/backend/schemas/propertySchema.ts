@@ -1,6 +1,6 @@
 import z from "zod";
 import { messages } from "../constants/validationMessages";
-import { Preference } from "../interfaces/preference";
+import { Preference } from "../interfaces/preference.enum";
 import { PropertyStatus } from "../interfaces/propertyStatus.enum";
 import { PropertyType } from "../interfaces/propertyType.enum";
 import { addressSchema } from "./addressSchema";

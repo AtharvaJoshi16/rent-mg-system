@@ -162,3 +162,5 @@ export const ownerSchema = z
       path: ["ownerId", "renterId"],
     }
   );
+
+export type ownerSchemaType = z.infer<typeof ownerSchema>;

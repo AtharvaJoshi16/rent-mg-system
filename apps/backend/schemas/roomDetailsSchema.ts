@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { messages } from "../constants/validationMessages";
-import { RentType } from "../interfaces/rentType";
+import { RentType } from "../interfaces/rentType.enum";
 import { propertyId } from "./propertySchema";
 
 export const roomDetailsSchema = z.object({
