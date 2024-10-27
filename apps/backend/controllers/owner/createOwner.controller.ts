@@ -1,15 +1,9 @@
 import { Request, Response } from "express";
-import { generateId } from "../../utils/generateId";
-import { db } from "../../utils/prismaClient";
+import { PrismaOwnerData } from "../../interfaces/owner";
+import { createOwner } from "../../repository/createOwner.repo";
 
 export const createOwnerController = async (req: Request, res: Response) => {
-  const data = req.body;
-  try {
-    await db.owner.create({
-      data: {
-        id: generateId(),
-        ...data,
-      },
-    });
-  } catch (e) {}
+  const data: PrismaOwnerData = req.body;
+  const ownerRepo = await createOwner(data);
+  res.status(ownerRepo.status).json(ownerRepo);
 };
