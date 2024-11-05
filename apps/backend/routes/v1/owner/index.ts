@@ -10,7 +10,6 @@ router.get("/health-check", (_req: Request, res: Response) => {
     code: 200,
   });
 });
-
 // /v1/owner POST
 router.post("/", validateOwnerData, createOwnerController);
 

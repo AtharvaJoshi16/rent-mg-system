@@ -1,17 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import { responses } from "../../constants/responseMessages";
-import { ownerSchema } from "../../schemas/ownerSchema";
+import { emailSchema } from "../../schemas/individualSchemas";
 import { formatZodError } from "../../utils/formatZodError";
 
-export const validateOwnerData = (
+export const validateEmail = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const data = req.body;
   try {
-    ownerSchema.parse(data);
+    emailSchema.parse(req.query.email);
     next();
   } catch (e) {
     if (e instanceof ZodError) {

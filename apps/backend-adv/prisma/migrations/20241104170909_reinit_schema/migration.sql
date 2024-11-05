@@ -14,23 +14,20 @@ CREATE TYPE "PropertyStatus" AS ENUM ('available', 'rentedOut', 'underMaintenanc
 CREATE TYPE "PreferredContactMethod" AS ENUM ('email', 'phone', 'any');
 
 -- CreateEnum
-CREATE TYPE "PreferredLanguage" AS ENUM ('marathi', 'hindi', 'english');
-
--- CreateEnum
-CREATE TYPE "UserType" AS ENUM ('SUPERUSER', 'OWNER', 'RENTER');
+CREATE TYPE "UserType" AS ENUM ('superuser', 'owner', 'renter');
 
 -- CreateTable
 CREATE TABLE "Owner" (
-    "id" BIGINT NOT NULL,
+    "id" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "userType" "UserType" NOT NULL,
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
-    "isVerified" BOOLEAN NOT NULL DEFAULT false,
-    "phone1" BIGINT NOT NULL,
-    "phone2" BIGINT,
+    "isVerified" BOOLEAN DEFAULT false,
+    "phone1" TEXT NOT NULL,
+    "phone2" TEXT,
     "aadharId" TEXT NOT NULL,
     "panId" TEXT NOT NULL,
     "aadhar" TEXT NOT NULL,
@@ -42,18 +39,17 @@ CREATE TABLE "Owner" (
     "profileImage" TEXT,
     "description" TEXT,
     "preferredContactMethod" "PreferredContactMethod",
-    "preferredLanguage" "PreferredLanguage",
-    "lastActive" TIMESTAMP(3) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "preferredLanguage" TEXT,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "Owner_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Property" (
-    "id" BIGINT NOT NULL,
-    "ownerId" BIGINT NOT NULL,
+    "id" INTEGER NOT NULL,
+    "ownerId" INTEGER NOT NULL,
     "isVerified" BOOLEAN DEFAULT false,
     "status" "PropertyStatus" NOT NULL DEFAULT 'pendingApproval',
     "nextAvailableDate" TIMESTAMP(3),
@@ -63,8 +59,8 @@ CREATE TABLE "Property" (
     "description" TEXT NOT NULL,
     "preferred" "Preference" NOT NULL,
     "photos" TEXT[],
-    "createdAt" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "Property_pkey" PRIMARY KEY ("id")
 );
@@ -72,7 +68,7 @@ CREATE TABLE "Property" (
 -- CreateTable
 CREATE TABLE "RoomDetails" (
     "id" TEXT NOT NULL,
-    "propertyId" BIGINT NOT NULL,
+    "propertyId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
     "rentType" "RentType" NOT NULL,
     "rent" INTEGER,
@@ -83,15 +79,15 @@ CREATE TABLE "RoomDetails" (
 
 -- CreateTable
 CREATE TABLE "Renter" (
-    "id" BIGINT NOT NULL,
-    "renterPropertyId" BIGINT,
+    "id" INTEGER NOT NULL,
+    "renterPropertyId" INTEGER,
     "password" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone1" BIGINT NOT NULL,
-    "phone2" BIGINT,
+    "phone1" TEXT NOT NULL,
+    "phone2" TEXT,
     "DOB" TIMESTAMP(3) NOT NULL,
     "userType" "UserType" NOT NULL,
     "aadharId" TEXT NOT NULL,
@@ -104,8 +100,8 @@ CREATE TABLE "Renter" (
     "voter" TEXT,
     "profileImage" TEXT NOT NULL,
     "desription" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "Renter_pkey" PRIMARY KEY ("id")
 );
@@ -113,15 +109,17 @@ CREATE TABLE "Renter" (
 -- CreateTable
 CREATE TABLE "Address" (
     "id" TEXT NOT NULL,
-    "ownerId" BIGINT,
-    "propertyId" BIGINT,
-    "renterId" BIGINT,
+    "ownerId" INTEGER,
+    "propertyId" INTEGER,
+    "renterId" INTEGER,
     "addressLine" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "state" TEXT NOT NULL,
-    "pincode" BIGINT NOT NULL,
+    "pincode" INTEGER NOT NULL,
     "electricityBill" TEXT,
     "propertyTaxBill" TEXT,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
@@ -129,15 +127,17 @@ CREATE TABLE "Address" (
 -- CreateTable
 CREATE TABLE "EmergencyDetails" (
     "id" TEXT NOT NULL,
-    "ownerId" BIGINT,
-    "renterId" BIGINT,
-    "phone1" BIGINT NOT NULL,
-    "phone2" BIGINT,
+    "ownerId" INTEGER,
+    "renterId" INTEGER,
+    "phone1" TEXT NOT NULL,
+    "phone2" TEXT,
     "email" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
     "relation" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "EmergencyDetails_pkey" PRIMARY KEY ("id")
 );

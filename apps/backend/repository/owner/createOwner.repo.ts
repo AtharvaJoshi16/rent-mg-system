@@ -1,9 +1,10 @@
-import { creationSuccessMessage } from "../constants/responseMessages";
-import { prismaErrorHandler } from "../handlers/prismaErrorHandler";
-import { PrismaOwnerData } from "../interfaces/owner";
-import { CustomCreateResponse } from "../interfaces/responses";
-import { generateId } from "../utils/generateId";
-import { db } from "../utils/prismaClient";
+import bcrypt from "bcrypt";
+import { creationSuccessMessage } from "../../constants/responseMessages";
+import { prismaErrorHandler } from "../../handlers/prismaErrorHandler";
+import { PrismaOwnerData } from "../../interfaces/owner";
+import { CustomCreateResponse } from "../../interfaces/responses";
+import { generateId } from "../../utils/generateId";
+import { db } from "../../utils/prismaClient";
 
 export const createOwner = async (
   data: PrismaOwnerData
@@ -12,6 +13,7 @@ export const createOwner = async (
   const formattedData = { ...data };
   const { address, emergencyDetails } = formattedData;
   formattedData.id = newId;
+  formattedData.password = bcrypt.hashSync(formattedData.password, 10);
   try {
     await db.owner.create({
       data: {
